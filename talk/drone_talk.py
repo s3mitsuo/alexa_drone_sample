@@ -169,7 +169,7 @@ if __name__ == '__main__':
     queue = Queue()
     res_queue = Queue()
     #proc = Process(target=init, args=('/dev/ttyAMA0', queue,))
-    proc = Process(target=init, args=('127.0.0.1:14550', queue, res_queue, ))
+    proc = Process(target=init, args=('127.0.0.1:20001', queue, res_queue, ))
     proc.start()
     # Connect to WS
     connect_ws(queue, res_queue)
