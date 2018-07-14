@@ -9,7 +9,7 @@ import websocket
 
 # talk
 def talk(text):
-    p = '/home/pi/talk/aquestalkpi/AquesTalkPi "' + text + '"| aplay'
+    p = '/home/pi/alexa_drone_sample/talk/aquestalkpi/AquesTalkPi "' + text + '"| aplay'
     print(p)
     os.system(p)
 
@@ -20,7 +20,7 @@ def mode_conv(mode):
     msg = mode
     if mode == "STABILIZE":
         msg = "スタビライズモード"
-    elif mode == "ALTHOLD":
+    elif mode == "ALT_HOLD":
         msg = "オルトホールドモード"
     elif mode == "LOITER":
         msg = "ロイターモード"
@@ -32,8 +32,6 @@ def mode_conv(mode):
         msg = "ランドモード"
     elif mode == "RTL":
         msg = "アールティーエルモード"
-    else:
-        msg = "不明モード"
     return msg
 
 
@@ -45,11 +43,17 @@ def init(host, q, res_q):
     @vehicle.on_message("STATUSTEXT")
     def listener(self, name, message):
         if "PreArm" in message.text:
-            talk("アームできません。")
+            talk("プレアームチェック")
             if "Need 3D Fix" in message.text:
                 talk("GPSがロックできません。")
             elif "GPS" in message.text and "error" in message.text:
-                talk("GPSに異常があります。")
+                talk("GPSに異常です。")
+            elif "mag" in message.text and "field" in message.text:
+                talk("コンパスエラーです。")
+            elif "Battery" in message.text:
+                talk("バッテリーを確認してください。")
+            else:
+                talk(message.text)
         elif "Crash" in message:
             talk("クラッシュしました。")
         else:
